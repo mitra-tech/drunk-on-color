@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart, UserIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { APP_NAME } from "@/lib/cosntants";
+import { APP_NAME } from "@/lib/constants";
 
 const Header = () => {
   return (
@@ -28,7 +28,7 @@ const Header = () => {
               <ShoppingCart /> Cart
             </Link>
           </Button>
-          <Button asChild variant="ghost">
+          <Button asChild>
             <Link href="/sign-in">
               <UserIcon /> Sign in
             </Link>
