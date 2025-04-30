@@ -9,7 +9,7 @@ import {
   DropdownMenuContent,
   DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
-import { Icon, MoonIcon, SunIcon, SunMoon } from "lucide-react";
+import { MoonIcon, SunIcon, SunMoon } from "lucide-react";
 import { useTheme } from "next-themes";
 
 const ModeToggle = () => {
