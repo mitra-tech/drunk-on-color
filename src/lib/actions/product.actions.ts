@@ -1,13 +1,11 @@
 "use server";
-
-import { PrismaClient } from "@/generated/prisma";
+import { prisma } from "@/db/prisma";
 import { convertToPlainObject } from "../utils";
 
 // what prisma client returns is an object and we need to convert it to a palain JS object
 
 // get latest products
 export async function getLatestProducts() {
-  const prisma = new PrismaClient();
   // data is a prisma object
   const data = await prisma.product.findMany({
     // take: how many we want
@@ -20,8 +18,6 @@ export async function getLatestProducts() {
 
 // get single product by its slug
 export async function getProductBySlug(slug: string) {
-  const prisma = new PrismaClient();
-
   // find the first slug where the slug is equal to the slug is passed in
   return await prisma.product.findFirst({
     where: { slug: slug },
