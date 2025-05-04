@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import ProductPrice from "@/components/shared/product/product-price";
+import ProductImages from "@/components/shared/product/product-images";
 
 // params is the dynamic value after the / in the url => http://localhost:3000/product/polo-sporting-stretch-shirt => params: polo-sporting-stretch-shirt
 // If we wanted to get the value of after ? it would be searchParam => http://localhost:3000/product/polo-sporting-stretch-shirt?name=shirt => searchParam: name=shirt
@@ -19,7 +20,9 @@ const ProductDetailsPage = async (props: {
       <section>
         <div className="grid grid-cols-1 md:grid-cols-5">
           {/* images column */}
-          <div className="col-span-2>">{/* images component */}</div>
+          <div className="col-span-2>">
+            <ProductImages images={product.images} />
+          </div>
           {/* datails column */}
           <div className="col-span-2 p-5">
             <div className="flex flex-col gap-6">
@@ -28,7 +31,7 @@ const ProductDetailsPage = async (props: {
               </p>
               <h1 className="h3-bold">{product.name}</h1>
               <p>
-                {product.rating} of {product.numReviews} reviews
+                {product.rating.toString()} of {product.numReviews} reviews
               </p>
               <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                 <ProductPrice
