@@ -152,7 +152,9 @@ const config = {
         "native": true
       }
     ],
-    "previewFeatures": [],
+    "previewFeatures": [
+      "driverAdapters"
+    ],
     "sourceFilePath": "/Users/mitradavoudi/Desktop/courses/next-ecommerce/drunk-on-color/prisma/schema.prisma",
     "isCustomOutput": true
   },
@@ -167,16 +169,17 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgres://neondb_owner:npg_0rOVwgCu1NfR@ep-empty-thunder-a59f61fq-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require"
+        "value": null
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Product {\n  id          String   @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  name        String\n  slug        String   @unique(map: \"product_slug_idx\")\n  category    String\n  images      String[]\n  brand       String\n  description String\n  stock       Int\n  price       Decimal  @default(0) @db.Decimal(12, 2)\n  rating      Decimal  @default(0) @db.Decimal(3, 2)\n  numReviews  Int      @default(0)\n  isFeatured  Boolean  @default(false)\n  banner      String?\n  createdAt   DateTime @default(now()) @db.Timestamp(6)\n}\n",
-  "inlineSchemaHash": "06cd6c2b536d03791f13977daf8d27fc1c511067ea21e4740d29f43f857b9dfa",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider        = \"prisma-client-js\"\n  output          = \"../src/generated/prisma\"\n  previewFeatures = [\"driverAdapters\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Product {\n  id          String   @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  name        String\n  slug        String   @unique(map: \"product_slug_idx\")\n  category    String\n  images      String[]\n  brand       String\n  description String\n  stock       Int\n  price       Decimal  @default(0) @db.Decimal(12, 2)\n  rating      Decimal  @default(0) @db.Decimal(3, 2)\n  numReviews  Int      @default(0)\n  isFeatured  Boolean  @default(false)\n  banner      String?\n  createdAt   DateTime @default(now()) @db.Timestamp(6)\n}\n",
+  "inlineSchemaHash": "c59c45b362fdf91078074fb103b8fb9be5a0491797b26634a3d87cf4dac8f314",
   "copyEngine": true
 }
 config.dirname = '/'
