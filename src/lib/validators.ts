@@ -23,7 +23,7 @@ export const insertProductSchema = z.object({
 });
 
 // Schema for signing user
-export const signInFormsSchema = z.object({
+export const signInFormSchema = z.object({
   email: z.string().email("Invalid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
