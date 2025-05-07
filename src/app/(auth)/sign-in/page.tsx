@@ -26,6 +26,7 @@ const SignInPage = async (props: {
   // this is how we get the session in the server component and in a client component we get it by useSession() hook
   const session = await auth();
   if (session) {
+    // se when we are logged in and we redirect, we wanna redirect to the callbackurl if it is there
     return redirect(callbackUrl || "/");
   }
   return (

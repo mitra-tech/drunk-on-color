@@ -7,7 +7,6 @@ import Link from "next/link";
 import { signInWithCredentials } from "@/lib/actions/user.actions";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-// because this is a client component we use the hook instead of passing props to the component
 import { useSearchParams } from "next/navigation";
 
 const CredentialsSignInForm = () => {
@@ -22,7 +21,9 @@ const CredentialsSignInForm = () => {
     }
   );
 
+  // because this is a client component we use the hook instead of passing props to the component
   const searchParams = useSearchParams();
+  // if the callbackUrl is there it will be set to the variable(callbackUrl) if not, it is going to be set to the '/'
   const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const SignInButton = () => {
@@ -37,6 +38,7 @@ const CredentialsSignInForm = () => {
   return (
     // action= {action} sets the action attribute to the action on the top and not directly to the signInWithCredentials
     <form action={action}>
+      {/* we need to persist the callbackurl to the submitted page in the form so we just send it as an hidden input */}
       <input type="hidden" name="callbackUrl" value={callbackUrl} />
       <div className="space-y-6">
         <div>
