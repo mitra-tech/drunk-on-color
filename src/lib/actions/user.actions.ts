@@ -19,6 +19,7 @@ export async function signInWithCredentials(
     });
     // credentials is the type of the provider we are using to sign in
     await signIn("credentials", user);
+    // this returns the action state object that has an email and message
     return { success: true, message: "Signed in successfully" };
   } catch (error) {
     if (isRedirectError(error)) {
