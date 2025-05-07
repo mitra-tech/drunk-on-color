@@ -3,9 +3,9 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/db/prisma";
 import { compareSync } from "bcrypt-ts-edge";
 import NextAuth from "next-auth";
-import type { AuthOptions } from "next-auth";
+import type { NextAuthConfig } from "next-auth";
 
-export const authOptions: AuthOptions = {
+export const config: NextAuthConfig = {
   pages: {
     signIn: "/sign-in",
     error: "/sign-in",
@@ -22,14 +22,15 @@ export const authOptions: AuthOptions = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
+      // credentials are the data coming from our form
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
-
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
+        if (!credentials) return null;
+        //Find user in database
+        const user = await prisma.user.findFirst({
+          where: { email: credentials.email as string },
         });
         // check if user exists and if the password matches
-        if (user && user.password === credentials.password) {
+        if (user && user.password) {
           // credentials.password is the password comes form the form (user puts in)
           //  user.password: the password in the database that we fetched above
           const isMatch = compareSync(
@@ -46,7 +47,7 @@ export const authOptions: AuthOptions = {
             };
           }
         }
-        // check if user exists and if the password matches
+        // check if user exists and if the password does not matche
         return null;
       },
     }),
@@ -55,7 +56,7 @@ export const authOptions: AuthOptions = {
     async session({ session, user, trigger, token }: any) {
       // Set the user ID from the token
       session.user.id = token.sub;
-      // If there in an update set the username (because user can update their name and we want to update the session if it is updated in the db)
+      // If there in an update set the user name (because user can update their name (not id and email) and we want to update the session if it is updated in the db)
       if (trigger === "update") {
         session.user.name = user.name;
       }
@@ -65,4 +66,4 @@ export const authOptions: AuthOptions = {
   },
 };
 
-export const { handlers, auth, signIn, signOut } = NextAuth(authOptions);
+export const { handlers, auth, signIn, signOut } = NextAuth(config);
