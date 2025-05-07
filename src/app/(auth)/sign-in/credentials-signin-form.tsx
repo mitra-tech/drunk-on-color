@@ -7,6 +7,8 @@ import Link from "next/link";
 import { signInWithCredentials } from "@/lib/actions/user.actions";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
+// because this is a client component we use the hook instead of passing props to the component
+import { useSearchParams } from "next/navigation";
 
 const CredentialsSignInForm = () => {
   // we want to hook the form with the signInWithCredentials() and data is our action state which includes success and message
@@ -19,6 +21,10 @@ const CredentialsSignInForm = () => {
       message: "",
     }
   );
+
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+
   const SignInButton = () => {
     const { pending } = useFormStatus();
     return (
@@ -31,6 +37,7 @@ const CredentialsSignInForm = () => {
   return (
     // action= {action} sets the action attribute to the action on the top and not directly to the signInWithCredentials
     <form action={action}>
+      <input type="hidden" name="callbackUrl" value={callbackUrl} />
       <div className="space-y-6">
         <div>
           <Label htmlFor="email" className="mb-2">
