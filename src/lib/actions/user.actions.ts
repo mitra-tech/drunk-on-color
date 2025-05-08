@@ -5,6 +5,8 @@ import { signInFormSchema, signUpFormSchema } from "../validators";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { hashSync } from "bcrypt-ts-edge";
 import { prisma } from "@/db/prisma";
+import { formatError } from "../utils";
+
 // Sign in the with credentials
 // The reason that this method takes to args is we want to use a new React hook called "useActionState" and when we submit an action with that hook, the first arg is gonna be "prevState", and the second arg is going to be formData
 // When we have actions we can put the action in the action attribute of the form tag in the HTML or JSX
@@ -69,6 +71,6 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
     if (isRedirectError(error)) {
       throw error;
     }
-    return { success: false, message: "Failed to register user" };
+    return { success: false, message: formatError(error) };
   }
 }

@@ -20,7 +20,7 @@ export function formatNumberWithDecimal(num: number): string {
 // Format Errors
 // We can add a type from prisma and zod, bur for now we ignore the any type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function formatErrors(error: any) {
+export async function formatError(error: any) {
   if (error.name === "ZodError") {
     // Handle Zod error
     // error.errors is array of objects and the key is 0 for the first one and 1 for the second one
@@ -28,13 +28,18 @@ export async function formatErrors(error: any) {
       // error.errors[field] => one of the objects of the array
       (field) => error.errors[field].message
     );
-    return fieldErrors.join(".");
+    return fieldErrors.join(". ");
   } else if (
     error.name === "PrismaClientKnownRequestError" &&
     error.code === "P2002"
   ) {
     // Handle prisma error
+    const field = error.meta?.target ? error.meta.target[0] : "Field";
+    return `${field.charAt(0).toUpperCase() + field.slice(1)} already exists.`;
   } else {
     // Handle other errors
+    return typeof error.message === "string"
+      ? error.message
+      : JSON.stringify(error.message);
   }
 }
