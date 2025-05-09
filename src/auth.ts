@@ -54,7 +54,6 @@ export const config: NextAuthConfig = {
   ],
   callbacks: {
     async session({ session, user, trigger, token }: any) {
-      console.log(token, "Token is:");
       // sub is a subject that is the user id
       // here we assign the token user id to the session user id
       session.user.id = token.sub;
@@ -86,9 +85,6 @@ export const config: NextAuthConfig = {
           });
         }
       }
-
-      console.log(token);
-
       return token;
     },
   },
