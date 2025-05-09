@@ -54,3 +54,13 @@ export const cartItemSchema = z.object({
 });
 
 // Schema for insert cart
+export const insertCartSchema = z.object({
+  items: z.array(cartItemSchema),
+  itemsPrice: currency,
+  totalPrice: currency,
+  shippingPrice: currency,
+  taxPrice: currency,
+  sessionCartId: z.string().min(1, "Session cart id is required"),
+  // we want to allow the guest users to add items to the cart and for checkout they must log in and then they come back to the page they are on and their card has to still have the same items there, because it is going to be in their database and in the session
+  userId: z.string().optional().nullable(),
+});
