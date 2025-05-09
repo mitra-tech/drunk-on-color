@@ -54,14 +54,42 @@ export const config: NextAuthConfig = {
   ],
   callbacks: {
     async session({ session, user, trigger, token }: any) {
-      // Set the user ID from the token
+      console.log(token, "Token is:");
+      // sub is a subject that is the user id
+      // here we assign the token user id to the session user id
       session.user.id = token.sub;
+      // now based on the changes we made in the token callback (below) we update the session as well with role and name
+      session.user.role = token.role;
+      session.user.name = token.name;
       // If there in an update set the user name (because user can update their name (not id and email) and we want to update the session if it is updated in the db)
+
       if (trigger === "update") {
         session.user.name = user.name;
       }
-
       return session;
+    },
+    async jwt({ token, user, trigger, session }: any) {
+      // Assign user fields to the token
+      if (user) {
+        // if there is a user we add the user role to the token as a role (admin/user,..)
+        token.role = user.role;
+        // If the user has no name then use the email
+        if (user.name === "NO_NAME") {
+          // e.g. if we have admin@example.com we want to split it by '@' into an array to get the name from the array
+          token.name = user.email!.split("@")[0];
+
+          // we want to update the database to reflect the token name (update the user in the db)
+          await prisma.user.update({
+            where: { id: user.id },
+            // whatever name is in the token now we want it to be in the database
+            data: { name: token.name },
+          });
+        }
+      }
+
+      console.log(token);
+
+      return token;
     },
   },
 };
