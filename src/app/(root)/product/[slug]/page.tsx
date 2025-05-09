@@ -1,10 +1,10 @@
 import { getProductBySlug } from "@/lib/actions/product.actions";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import ProductPrice from "@/components/shared/product/product-price";
 import ProductImages from "@/components/shared/product/product-images";
+import AddToCart from "@/components/shared/product/add-to-cart";
 
 // params is the dynamic value after the / in the url => http://localhost:3000/product/polo-sporting-stretch-shirt => params: polo-sporting-stretch-shirt
 // If we wanted to get the value of after ? it would be searchParam => http://localhost:3000/product/polo-sporting-stretch-shirt?name=shirt => searchParam: name=shirt
@@ -65,7 +65,16 @@ const ProductDetailsPage = async (props: {
                 </div>
                 {product.stock > 0 && (
                   <div className="flex-center">
-                    <Button className="w-full mt-3">Add to Cart</Button>
+                    <AddToCart
+                      item={{
+                        productId: product.id,
+                        name: product.name,
+                        slug: product.slug,
+                        price: product.price,
+                        qty: 1,
+                        image: product.images![0],
+                      }}
+                    />{" "}
                   </div>
                 )}
               </CardContent>
