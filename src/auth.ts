@@ -5,7 +5,7 @@ import { compareSync } from "bcrypt-ts-edge";
 import NextAuth from "next-auth";
 import type { NextAuthConfig } from "next-auth";
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+// import { cookies } from "next/headers";
 
 export const config: NextAuthConfig = {
   pages: {
@@ -69,6 +69,7 @@ export const config: NextAuthConfig = {
       }
       return session;
     },
+
     async jwt({ token, user, trigger, session }: any) {
       // Assign user fields to the token
       if (user) {
@@ -89,21 +90,26 @@ export const config: NextAuthConfig = {
       }
       return token;
     },
-    authorized({ request, auth }: any) {
-      //Check for session cart cookie
+
+    // we want to create a cookie for every user to connect them to their cart weather they are logged in or not as soon as they come to our website
+    async authorized({ request, auth }: any) {
+      // Check for session cart cookie
+      console.log("test ", request);
       if (!request.cookies.get("sessionCartId")) {
+        console.log(request);
         //  If no sessionCartId, then genereate a session cart id cookie
         const sessionCartId = crypto.randomUUID();
+
         // Clone request headers
         const newRequestHeaders = new Headers(request.headers);
 
-        // Create new rewsponse and add the new headers
+        // Create new response and add the new headers
         const respone = NextResponse.next({
           request: {
             headers: newRequestHeaders,
           },
         });
-        // Set newly generated sessiopnCartId in the response cookies
+        // Set newly generated sessiopnCartId in the response cookies (generate the cookie and add it to the response)
         respone.cookies.set("sessionCartId", sessionCartId);
         return respone;
       } else {
