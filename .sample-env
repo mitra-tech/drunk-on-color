@@ -1,0 +1,3 @@
+NEXT_PUBLIC_APP_NAME = "Drunk on Color";
+NEXT_PUBLIC_APP_DESCRIPTION = "A virtual world where colors meet art";
+SERVER_URL = "http://localhost:3000"
