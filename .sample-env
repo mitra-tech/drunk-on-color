@@ -1,3 +1,5 @@
 NEXT_PUBLIC_APP_NAME = "Drunk on Color";
 NEXT_PUBLIC_APP_DESCRIPTION = "A virtual world where colors meet art";
-SERVER_URL = "http://localhost:3000"
+NEXT_PUBLIC_SERVER_URL = "http://localhost:3000";
+LATEST_PRODUCTS_LIMIT = 4
+DATABASE_URL="postgres://neondb_owner:npg_0rOVwgCu1NfR@ep-empty-thunder-a59f61fq-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require"
