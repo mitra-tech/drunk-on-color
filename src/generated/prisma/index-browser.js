@@ -184,7 +184,7 @@ exports.Prisma.VerificationTokenScalarFieldEnum = {
 exports.Prisma.CartScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  sessionCart: 'sessionCart',
+  sessionCartId: 'sessionCartId',
   items: 'items',
   itemsPrice: 'itemsPrice',
   totalPrice: 'totalPrice',

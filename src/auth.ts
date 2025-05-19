@@ -94,9 +94,7 @@ export const config: NextAuthConfig = {
     // we want to create a cookie for every user to connect them to their cart weather they are logged in or not as soon as they come to our website
     async authorized({ request, auth }: any) {
       // Check for session cart cookie
-      console.log("test ", request);
       if (!request.cookies.get("sessionCartId")) {
-        console.log(request);
         //  If no sessionCartId, then genereate a session cart id cookie
         const sessionCartId = crypto.randomUUID();
 
