@@ -24,12 +24,12 @@ export async function addItemToCart(data: CartItem) {
     // Parse and validate item
     const item = cartItemSchema.parse(data);
 
+    // Find product in the database
+    const product = await prisma.product.findFirst({
+      where: { id: item.productId },
+    });
     // Testing
-    console.log(
-      { "Session Cart ID: ": sessionCartId },
-      { "User ID: ": userId },
-      { Item: item }
-    );
+    console.log("Product found:", product);
     return {
       success: true,
       message: "Item added tp cart",
@@ -53,9 +53,11 @@ export async function getMyCart() {
 
   // Get the users cart by user id
   const cart = await prisma.cart.findFirst({
-    where: {
-      sessionCartId: sessionCartId,
-    },
+    where: userId
+      ? { userId: userId }
+      : {
+          sessionCartId: sessionCartId,
+        },
   });
   if (!cart) return undefined;
   // Convert decimals and return
