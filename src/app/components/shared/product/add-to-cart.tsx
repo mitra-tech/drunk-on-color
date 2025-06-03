@@ -13,7 +13,6 @@ const AddToCart = ({ cart, item }: { cart?: Cart; item: CartItem }) => {
 
   const handleAddToCart = async () => {
     startTransition(async () => {
-      console.log("Adding item to cart:", item);
       try {
         const res = await addItemToCart(item);
 

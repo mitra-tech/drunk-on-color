@@ -34,7 +34,7 @@ export async function addItemToCart(data: CartItem) {
     const sessionCartId = (await cookies()).get("sessionCartId")?.value;
     if (!sessionCartId) throw new Error("Cart session not found");
 
-    // Get session and user ID
+    // Get session ID and user ID
     const session = await auth();
     const userId = session?.user?.id ? (session.user.id as string) : undefined;
 
@@ -83,7 +83,7 @@ export async function addItemToCart(data: CartItem) {
           throw new Error("Not enough stock");
         }
 
-        // Increase the quantity
+        // Increase the quantity instead of adding a new item
         (cart.items as CartItem[]).find(
           (x) => x.productId === item.productId
         )!.qty = existItem.qty + 1;
