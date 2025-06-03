@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import ProductPrice from "@/components/shared/product/product-price";
 import ProductImages from "@/components/shared/product/product-images";
 import AddToCart from "@/components/shared/product/add-to-cart";
+import { getMyCart } from "@/lib/actions/cart.actions";
 
 // params is the dynamic value after the / in the url => http://localhost:3000/product/polo-sporting-stretch-shirt => params: polo-sporting-stretch-shirt
 // If we wanted to get the value of after ? it would be searchParam => http://localhost:3000/product/polo-sporting-stretch-shirt?name=shirt => searchParam: name=shirt
@@ -14,6 +15,10 @@ const ProductDetailsPage = async (props: {
   const { slug } = await props.params;
   const product = await getProductBySlug(slug);
   if (!product) notFound();
+
+  // Get the cart items
+  const cart = await getMyCart();
+
   return (
     <>
       <section>
@@ -65,6 +70,7 @@ const ProductDetailsPage = async (props: {
                 {product.stock > 0 && (
                   <div className="flex-center">
                     <AddToCart
+                      cart={cart}
                       item={{
                         productId: product.id,
                         name: product.name,
