@@ -7,17 +7,17 @@ import { Cart, CartItem } from "@/types";
 import { addItemToCart } from "@/lib/actions/cart.actions";
 import { useTransition } from "react";
 import { toast } from "sonner";
-
 const AddToCart = ({ cart, item }: { cart?: Cart; item: CartItem }) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const handleAddToCart = async () => {
     startTransition(async () => {
+      console.log("Adding item to cart:", item);
       try {
         const res = await addItemToCart(item);
 
-        if (!res?.success) {
+        if (!res || !res.success) {
           toast.error(res?.message || "Failed to add to cart.");
           return;
         }
