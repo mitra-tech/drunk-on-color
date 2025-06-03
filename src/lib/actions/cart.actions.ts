@@ -173,7 +173,33 @@ export async function removeItemFromCart(productId: string) {
     );
     if (!exist) throw new Error("Item not found in cart");
 
-    // Remove item from cart
+    // Check if there is only one item in the cart
+    if (exist.qty === 1) {
+      // Remove item from cart (filter out the one that we want to remove)
+      cart.items = (cart.items as CartItem[]).filter(
+        (x) => x.productId !== exist.productId
+      );
+    } else {
+      // Decrease the quantity of the item
+      (cart.items as CartItem[]).find((x) => x.productId === productId)!.qty =
+        exist.qty - 1;
+    }
+    // Update the cart in the database
+    await prisma.cart.update({
+      where: { id: cart.id },
+      data: {
+        items: cart.items as Prisma.CartUpdateitemsInput[],
+        ...calcPrice(cart.items as CartItem[]),
+      },
+    });
+
+    // Revalidate product page
+    revalidatePath(`/product/${product.slug}`);
+
+    return {
+      success: true,
+      message: `${product.name} removed from cart`,
+    };
   } catch (error) {
     return {
       success: false,
