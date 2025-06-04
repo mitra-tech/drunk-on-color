@@ -54,3 +54,20 @@ export function round2(value: number | string) {
     throw new Error("Value is not a number or a string");
   }
 }
+// Format currency
+const CURRENCY_FORMATTER = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 2,
+});
+
+// Format currency with formatter
+export function formatCurrency(amount: number | string | null): string {
+  if (typeof amount === "number") {
+    return CURRENCY_FORMATTER.format(amount);
+  } else if (typeof amount === "string") {
+    return CURRENCY_FORMATTER.format(Number(amount));
+  } else {
+    throw new Error("Value is not a number or a string");
+  }
+}
