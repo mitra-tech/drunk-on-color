@@ -64,3 +64,14 @@ export const insertCartSchema = z.object({
   // we want to allow the guest users to add items to the cart and for checkout they must log in and then they come back to the page they are on and their card has to still have the same items there, because it is going to be in their database and in the session
   userId: z.string().optional().nullable(),
 });
+
+// Schema for shipping address
+export const shippingAddressSchema = z.object({
+  fullName: z.string().min(3, "Full name must be at least 3 characters"),
+  streetAddress: z.string().min(3, "Address must be at least 3 characters"),
+  city: z.string().min(3, "City must be at least 3 characters"),
+  postalCode: z.string().min(3, "Postal code must be at least 3 characters"),
+  country: z.string().min(3, "Country must be at least 3 characters"),
+  lat: z.number().optional(),
+  lng: z.number().optional(),
+});
