@@ -92,19 +92,16 @@ export async function getUserById(userId: string) {
   return user;
 }
 
-// Updadate user address
+// Update the user's address
 export async function updateUserAddress(data: ShippingAddress) {
   try {
     const session = await auth();
 
-    const currentUser = prisma.user.findFirst({
-      where: {
-        id: session?.user?.id,
-      },
+    const currentUser = await prisma.user.findFirst({
+      where: { id: session?.user?.id },
     });
-    if (!currentUser) {
-      throw new Error("User not found");
-    }
+
+    if (!currentUser) throw new Error("User not found");
 
     const address = shippingAddressSchema.parse(data);
 
@@ -112,6 +109,11 @@ export async function updateUserAddress(data: ShippingAddress) {
       where: { id: currentUser.id },
       data: { address },
     });
+
+    return {
+      success: true,
+      message: "User updated successfully",
+    };
   } catch (error) {
     return { success: false, message: formatError(error) };
   }
