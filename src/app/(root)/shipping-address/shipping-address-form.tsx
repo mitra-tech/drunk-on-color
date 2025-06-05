@@ -72,7 +72,7 @@ const ShippingAddressForm = ({ address }: { address: ShippingAddress }) => {
                     "fullName"
                   >;
                 }) => (
-                  <FormItem className="w-full">
+                  <FormItem className="w-full mt-3">
                     <FormLabel>Full Name</FormLabel>
                     <FormControl>
                       <Input placeholder="Enter full name" {...field} />
@@ -94,7 +94,7 @@ const ShippingAddressForm = ({ address }: { address: ShippingAddress }) => {
                     "streetAddress"
                   >;
                 }) => (
-                  <FormItem className="w-full">
+                  <FormItem className="w-full mt-2">
                     <FormLabel>Address</FormLabel>
                     <FormControl>
                       <Input placeholder="Enter address" {...field} />
@@ -116,7 +116,7 @@ const ShippingAddressForm = ({ address }: { address: ShippingAddress }) => {
                     "city"
                   >;
                 }) => (
-                  <FormItem className="w-full">
+                  <FormItem className="w-full mt-2">
                     <FormLabel>City</FormLabel>
                     <FormControl>
                       <Input placeholder="Enter city" {...field} />
@@ -138,7 +138,7 @@ const ShippingAddressForm = ({ address }: { address: ShippingAddress }) => {
                     "postalCode"
                   >;
                 }) => (
-                  <FormItem className="w-full">
+                  <FormItem className="w-full mt-2">
                     <FormLabel>Postal Code</FormLabel>
                     <FormControl>
                       <Input placeholder="Enter postal code" {...field} />
@@ -160,7 +160,7 @@ const ShippingAddressForm = ({ address }: { address: ShippingAddress }) => {
                     "country"
                   >;
                 }) => (
-                  <FormItem className="w-full">
+                  <FormItem className="w-full mt-2">
                     <FormLabel>Country</FormLabel>
                     <FormControl>
                       <Input placeholder="Enter country" {...field} />
