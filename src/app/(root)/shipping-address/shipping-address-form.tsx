@@ -6,7 +6,8 @@ import { shippingAddressDefaultValues } from "@/lib/constants";
 import { shippingAddressSchema } from "@/lib/validators";
 import { ShippingAddress } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ControllerRenderProps, SubmitHandler, useForm } from "react-hook-form";
+import { ControllerRenderProps, useForm, SubmitHandler } from "react-hook-form";
+import { updateUserAddress } from "@/lib/actions/user.actions";
 import { z } from "zod";
 import {
   Form,
@@ -30,8 +31,20 @@ const ShippingAddressForm = ({ address }: { address: ShippingAddress }) => {
 
   const [isPending, startTransition] = useTransition();
 
-  const onSubmit = () => {
-    return;
+  const onSubmit: SubmitHandler<z.infer<typeof shippingAddressSchema>> = async (
+    values
+  ) => {
+    startTransition(async () => {
+      // call the action to update the user address
+      const res = await updateUserAddress(values);
+
+      if (!res.success) {
+        toast.error(res.message);
+        return;
+      }
+
+      router.push("/payment-method");
+    });
   };
 
   return (
