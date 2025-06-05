@@ -3,9 +3,29 @@ import { getMyCart } from "@/lib/actions/cart.actions";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { ShipingAddress } from "@/types";
+import { getUserById } from "@/lib/actions/user.actions";
 
-const ShippingAddress = () => {
+export const metadata: Metadata = {
+  title: "Shipping Address",
+};
+
+const ShippingAddressPage = async () => {
+  const cart = await getMyCart();
+
+  if (!cart || cart.items.length === 0) {
+    redirect("/cart");
+  }
+  const session = await auth();
+
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    throw new Error("User not authenticated/ not found");
+  }
+
+  const user = await getUserById(userId);
+
   return <>Shipping Address</>;
 };
 
-export default ShippingAddress;
+export default ShippingAddressPage;
