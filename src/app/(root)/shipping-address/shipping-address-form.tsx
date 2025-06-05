@@ -30,8 +30,7 @@ const ShippingAddressForm = ({ address }: { address: ShippingAddress }) => {
 
   const [isPending, startTransition] = useTransition();
 
-  const onSubmit = (values) => {
-    console.log("Shipping Address Submitted:", values);
+  const onSubmit = () => {
     return;
   };
 
