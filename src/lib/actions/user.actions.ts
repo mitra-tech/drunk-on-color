@@ -5,12 +5,14 @@ import {
   shippingAddressSchema,
   signInFormSchema,
   signUpFormSchema,
+  paymentMethodSchema,
 } from "../validators";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { hashSync } from "bcrypt-ts-edge";
 import { prisma } from "@/db/prisma";
 import { formatError } from "../utils";
 import { ShippingAddress } from "@/types";
+import z from "zod";
 // Sign in the with credentials
 // The reason that this method takes to args is we want to use a new React hook called "useActionState" and when we submit an action with that hook, the first arg is gonna be "prevState", and the second arg is going to be formData
 // When we have actions we can put the action in the action attribute of the form tag in the HTML or JSX
@@ -110,6 +112,37 @@ export async function updateUserAddress(data: ShippingAddress) {
       data: { address },
     });
 
+    return {
+      success: true,
+      message: "User updated successfully",
+    };
+  } catch (error) {
+    return { success: false, message: formatError(error) };
+  }
+}
+
+// Update the user's payment method
+export async function updateUserPaymentMethod(
+  data: z.infer<typeof paymentMethodSchema>
+) {
+  try {
+    // getting the user that logged in from the database
+    const session = await auth();
+    const currentUser = await prisma.user.findFirst({
+      where: { id: session?.user?.id },
+    });
+
+    if (!currentUser) throw new Error("User not found");
+
+    // Getting the payment method from the form data
+    // Validating the payment method data using the paymentMethodSchema
+    const paymentMethod = paymentMethodSchema.parse(data);
+
+    // updating the user in the database
+    await prisma.user.update({
+      where: { id: currentUser.id },
+      data: { paymentMethod: paymentMethod.type },
+    });
     return {
       success: true,
       message: "User updated successfully",
