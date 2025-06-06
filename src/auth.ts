@@ -126,6 +126,24 @@ export const config: NextAuthConfig = {
 
     // we want to create a cookie for every user to connect them to their cart weather they are logged in or not as soon as they come to our website
     async authorized({ request, auth }: any) {
+      // we want to add protected routes to the auth object (create an array of regex expressions or patterns of paths we want to protect)
+      const protectedPaths = [
+        /\/shipping-address/,
+        /\/payment-method/,
+        /\/place-order/,
+        /\/profile/,
+        /\/user\/(.*)/,
+        /\/order\/(.*)/,
+        /\/admin/,
+      ];
+      //Get the path name from the request URL object
+      const { pathname } = request.nextUrl;
+
+      // Check if user is not authenticated and accessing a protected path
+      if (!auth && protectedPaths.some((path) => path.test(pathname)))
+        // then returns false and redirects to the sign-in page
+        return false;
+
       // Check for session cart cookie
       if (!request.cookies.get("sessionCartId")) {
         //  If no sessionCartId, then genereate a session cart id cookie
