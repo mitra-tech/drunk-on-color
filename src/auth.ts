@@ -5,6 +5,7 @@ import { compareSync } from "bcrypt-ts-edge";
 import NextAuth from "next-auth";
 import type { NextAuthConfig } from "next-auth";
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 // import { cookies } from "next/headers";
 
 export const config: NextAuthConfig = {
@@ -73,6 +74,7 @@ export const config: NextAuthConfig = {
     async jwt({ token, user, trigger, session }: any) {
       // Assign user fields to the token
       if (user) {
+        token.id = user.id;
         // if there is a user we add the user role to the token as a role (admin/user,..)
         token.role = user.role;
         // If the user has no name then use the email
@@ -86,6 +88,37 @@ export const config: NextAuthConfig = {
             // whatever name is in the token now we want it to be in the database
             data: { name: token.name },
           });
+        }
+        // We want to check to see it the trigger is sign-in or sign-up
+        if (trigger === "signIn" || trigger === "signUp") {
+          const cookiesObject = await cookies();
+          const sessionCartId = cookiesObject.get("sessionCartId")?.value;
+
+          // If there is a sessionCartId cookie, we want to get that from database
+          if (sessionCartId) {
+            const sessionCart = await prisma.cart.findFirst({
+              where: {
+                sessionCartId,
+              },
+            });
+            // If there is a sessionCart, we want to override any existing user cart
+            if (sessionCart) {
+              await prisma.cart.deleteMany({
+                where: {
+                  userId: user.id,
+                },
+              });
+              // Assign a new cart
+              await prisma.cart.update({
+                where: {
+                  id: sessionCart.id,
+                },
+                data: {
+                  userId: user.id,
+                },
+              });
+            }
+          }
         }
       }
       return token;
