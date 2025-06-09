@@ -10,7 +10,7 @@ import { prisma } from "@/db/prisma";
 import { CartItem } from "@/types";
 
 // Create order and create the order items
-export async function createRouteLoader() {
+export async function createOrder() {
   try {
     const session = await auth();
     if (!session) throw new Error("User is not authenticated!");
