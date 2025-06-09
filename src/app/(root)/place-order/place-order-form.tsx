@@ -13,8 +13,9 @@ const PlaceOrderForm = () => {
     event.preventDefault();
 
     const res = await createOrder();
-
+    // Check the redirect
     if (res.redirectTo) {
+      // We want to redirect regardless of what redirect is
       router.push(res.redirectTo);
     }
   };
