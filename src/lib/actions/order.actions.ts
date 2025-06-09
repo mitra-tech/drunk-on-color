@@ -13,12 +13,11 @@ import { CartItem } from "@/types";
 export async function createOrder() {
   try {
     const session = await auth();
-    if (!session) throw new Error("User is not authenticated!");
+    if (!session) throw new Error("User is not authenticated");
 
     const cart = await getMyCart();
     const userId = session?.user?.id;
-
-    if (!userId) throw new Error("User not found!");
+    if (!userId) throw new Error("User not found");
 
     const user = await getUserById(userId);
 
@@ -29,13 +28,16 @@ export async function createOrder() {
         redirectTo: "/cart",
       };
     }
+
     if (!user.address) {
       return {
         success: false,
+
         message: "No shipping address",
         redirectTo: "/shipping-address",
       };
     }
+
     if (!user.paymentMethod) {
       return {
         success: false,
@@ -59,8 +61,7 @@ export async function createOrder() {
     const insertedOrderId = await prisma.$transaction(async (tx) => {
       // Create order
       const insertedOrder = await tx.order.create({ data: order });
-
-      //Create order items from yhr cart items
+      // Create order items from the cart items
       for (const item of cart.items as CartItem[]) {
         await tx.orderItem.create({
           data: {
@@ -71,7 +72,6 @@ export async function createOrder() {
         });
       }
       // Clear cart
-
       await tx.cart.update({
         where: { id: cart.id },
         data: {
@@ -82,13 +82,16 @@ export async function createOrder() {
           itemsPrice: 0,
         },
       });
+
       return insertedOrder.id;
     });
-    if (!insertedOrderId) throw new Error("Order not created!");
+
+    if (!insertedOrderId) throw new Error("Order not created");
+
     return {
       success: true,
-      message: "Order created.",
-      redirecTo: `/order/${insertedOrderId}`,
+      message: "Order created",
+      redirectTo: `/order/${insertedOrderId}`,
     };
   } catch (error) {
     if (isRedirectError(error)) throw error;
