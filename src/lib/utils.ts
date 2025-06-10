@@ -71,3 +71,11 @@ export function formatCurrency(amount: number | string | null): string {
     throw new Error("Value is not a number or a string");
   }
 }
+
+// Shorten the UUID
+export function formatId(id: string) {
+  // it is going to give us the last 6 characters
+  return `..${id.substring(id.length - 6)}`;
+}
+
+// Formt date and times

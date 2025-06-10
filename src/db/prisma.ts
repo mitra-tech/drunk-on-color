@@ -31,6 +31,12 @@ export const prisma = new PrismaClient({ adapter }).$extends({
           return cart.itemsPrice.toString();
         },
       },
+      order: {
+        needs: { itemsPrice: true },
+        compute(cart) {
+          return cart.itemsPrice.toString();
+        },
+      },
       shippingPrice: {
         needs: { shippingPrice: true },
         compute(cart) {
