@@ -1,5 +1,3 @@
-import { POST } from "@/app/api/auth/[...nextauth]/route";
-
 const base = process.env.PAYPAL_API_URL || "https://api-m.sandbox.paypal.com";
 
 export const paypal = {};
@@ -28,3 +26,5 @@ async function generateAccessToken() {
     throw new Error(errorMessage);
   }
 }
+
+export { generateAccessToken };
