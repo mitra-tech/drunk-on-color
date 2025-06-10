@@ -1,3 +1,5 @@
+"use client";
+
 const OrderDetailsTable = () => {
   return <>Order Detals Table</>;
 };
