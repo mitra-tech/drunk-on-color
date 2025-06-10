@@ -94,7 +94,7 @@ export const paymentMethodSchema = z
 
 // Schema for inserting order
 export const insertOrderSchema = z.object({
-  userId: z.string().min(1, "User id is required"),
+  userId: z.string().min(1, "User is required"),
   itemsPrice: currency,
   shippingPrice: currency,
   taxPrice: currency,
@@ -105,7 +105,8 @@ export const insertOrderSchema = z.object({
   shippingAddress: shippingAddressSchema,
 });
 
-// Schema for insert an order item
+
+// Schema for inserting an order item
 export const insertOrderItemSchema = z.object({
   productId: z.string(),
   slug: z.string(),

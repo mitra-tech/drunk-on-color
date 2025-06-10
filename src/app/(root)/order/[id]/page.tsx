@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import { getOrderById } from "@/lib/actions/order.actions";
 import { notFound } from "next/navigation";
+import OrderDetailsTable from "./order-details-table";
+import { ShippingAddress } from "@/types";
 
 export const metadata: Metadata = {
   title: "Order Details",
@@ -17,7 +19,26 @@ const OrderDetailsPage = async (props: {
   const order = await getOrderById(id);
   if (!order) notFound();
 
-  return <>Details</>;
+  return (
+    <OrderDetailsTable
+      order={{
+        ...order,
+        shippingAddress: order.shippingAddress as ShippingAddress,
+        itemsPrice: order.itemsPrice,
+        shippingPrice: order.shippingPrice,
+        taxPrice: order.taxPrice,
+        totalPrice: order.totalPrice,
+        orderitems: order.orderitems.map((item) => ({
+          name: item.name,
+          slug: item.slug,
+          price: item.price.toFixed?.(2) ?? item.price,
+          image: item.image,
+          productId: item.productId,
+          qty: item.qty,
+        })),
+      }}
+    />
+  );
 };
 
 export default OrderDetailsPage;
