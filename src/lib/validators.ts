@@ -105,7 +105,6 @@ export const insertOrderSchema = z.object({
   shippingAddress: shippingAddressSchema,
 });
 
-
 // Schema for inserting an order item
 export const insertOrderItemSchema = z.object({
   productId: z.string(),
@@ -114,4 +113,11 @@ export const insertOrderItemSchema = z.object({
   name: z.string(),
   price: currency,
   qty: z.number(),
+});
+
+export const paymentResultSchema = z.object({
+  id: z.string(),
+  status: z.string(),
+  email_address: z.string(),
+  pricePaid: z.string(),
 });
