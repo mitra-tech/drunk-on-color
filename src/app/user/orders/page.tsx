@@ -70,7 +70,7 @@ const OrdersPage = async (props: {
         {orders.totolpages >= 1 && (
           <Pagination
             page={Number(page) || 1}
-            totalpages={orders?.totolpages}
+            totalPages={orders?.totolpages}
           />
         )}
       </div>
