@@ -34,7 +34,6 @@ const ProfileForm = () => {
       toast.error(res.message);
       return;
     }
-
     const newSession = {
       ...session,
       user: {
