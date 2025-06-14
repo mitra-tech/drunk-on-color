@@ -12,7 +12,6 @@ import { paypal } from "../paypal";
 import { revalidatePath } from "next/cache";
 import { PAGE_SIZE } from "../constants";
 import { Prisma } from "@prisma/client";
-import { late } from "zod";
 
 // Create order and create the order items
 export async function createOrder() {
@@ -291,7 +290,7 @@ type SalesDataType = {
 export async function getOrderSummary() {
   // Get the counts for each resource
   const ordersCount = await prisma.order.count();
-  const productssCount = await prisma.product.count();
+  const productsCount = await prisma.product.count();
   const usersCount = await prisma.user.count();
 
   // Calculate the total sales
@@ -321,7 +320,7 @@ export async function getOrderSummary() {
   });
   return {
     ordersCount,
-    productssCount,
+    productsCount,
     usersCount,
     totalSales,
     latestSales,
