@@ -1,8 +1,9 @@
 "use server";
 import { prisma } from "@/db/prisma";
-import { convertToPlainObject } from "../utils";
+import { convertToPlainObject, formatError } from "../utils";
 import { Prisma } from "@prisma/client";
 import { PAGE_SIZE } from "../constants";
+import { revalidatePath } from "next/cache";
 // what prisma client returns is an object and we need to convert it to a palain JS object
 
 // get latest products
@@ -103,4 +104,20 @@ export async function getAllProducts({
     data,
     totalPages: Math.ceil(dataCount / limit),
   };
+}
+
+// Delete an order
+export async function deleteOrder(id: string) {
+  try {
+    await prisma.order.delete({ where: { id } });
+
+    revalidatePath("/admin/orders");
+
+    return {
+      success: true,
+      message: "Order deleted successfully",
+    };
+  } catch (error) {
+    return { success: false, message: formatError(error) };
+  }
 }
