@@ -4,6 +4,8 @@ import { convertToPlainObject, formatError } from "../utils";
 import { Prisma } from "@prisma/client";
 import { PAGE_SIZE } from "../constants";
 import { revalidatePath } from "next/cache";
+import { insertProductSchema } from "../validators";
+import z from "zod";
 
 // what prisma client returns is an object and we need to convert it to a palain JS object
 
@@ -123,6 +125,23 @@ export async function deleteProduct(id: string) {
     return {
       success: true,
       message: "Product deleted successfully",
+    };
+  } catch (error) {
+    return { success: false, message: formatError(error) };
+  }
+}
+
+// Create a product
+export async function createProduct(data: z.infer<typeof insertProductSchema>) {
+  try {
+    const product = insertProductSchema.parse(data);
+    await prisma.product.create({ data: product });
+
+    revalidatePath("/admin/products");
+
+    return {
+      success: true,
+      message: "Product created successfully",
     };
   } catch (error) {
     return { success: false, message: formatError(error) };
