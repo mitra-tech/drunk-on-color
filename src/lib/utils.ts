@@ -21,7 +21,7 @@ export function formatNumberWithDecimal(num: number): string {
 // Format Errors
 // We can add a type from prisma and zod, bur for now we ignore the any type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function formatError(error: any) {
+export function formatError(error: any) {
   if (error.name === "ZodError") {
     // Handle Zod error
     // error.errors is array of objects and the key is 0 for the first one and 1 for the second one
