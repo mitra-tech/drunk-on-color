@@ -181,7 +181,7 @@ export async function approvePayPalOrder(
     }
 
     // Update order paid
-    await upateOrderToPaid({
+    await updateOrderToPaid({
       orderId,
       paymentResult: {
         id: captureData.id,
@@ -205,7 +205,7 @@ export async function approvePayPalOrder(
 }
 
 // Update order to paid
-async function upateOrderToPaid({
+async function updateOrderToPaid({
   orderId,
   paymentResult,
 }: {
@@ -378,6 +378,19 @@ export async function deleteOrder(id: string) {
       success: true,
       message: "Order deleted successfully",
     };
+  } catch (error) {
+    return { success: false, message: formatError(error) };
+  }
+}
+
+// Update COD order to paid
+export async function updateOrderToPaidCOD(orderId: string) {
+  try {
+    await updateOrderToPaid({ orderId });
+
+    revalidatePath(`/order/${orderId}`);
+
+    return { success: true, message: "Order marked as paid" };
   } catch (error) {
     return { success: false, message: formatError(error) };
   }
