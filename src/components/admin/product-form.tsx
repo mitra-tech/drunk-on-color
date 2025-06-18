@@ -1,13 +1,26 @@
 "use client";
 
+import { toast } from "sonner";
 import { productDefaultValues } from "@/lib/constants";
 import { insertProductSchema, updateProductSchema } from "@/lib/validators";
 import { Product } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { ControllerRenderProps, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { createProduct, updateProduct } from "@/lib/actions/product.actions";
+import { Card, CardContent } from "../ui/card";
+import Image from "next/image";
 
 const ProductForm = ({
   type,
@@ -20,16 +33,20 @@ const ProductForm = ({
 }) => {
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof insertProductSchema>>({
-    resolver:
-      type === "Update"
-        ? zodResolver(updateProductSchema)
-        : zodResolver(insertProductSchema),
+  type InsertFormType = z.infer<typeof insertProductSchema>;
+  type UpdateFormType = z.infer<typeof updateProductSchema>;
+
+  const form = useForm<InsertFormType | UpdateFormType>({
+    resolver: zodResolver(
+      type === "Update" ? updateProductSchema : insertProductSchema
+    ),
     defaultValues:
-      product && type === "Update" ? product : productDefaultValues,
+      type === "Update"
+        ? (product as UpdateFormType)
+        : (productDefaultValues as InsertFormType),
   });
 
-  return <>Product Form</>;
+  return <Form {...form}>Product Form</Form>;
 };
 
 export default ProductForm;
