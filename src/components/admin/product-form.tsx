@@ -16,7 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-
+import slugify from "slugify";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
@@ -143,7 +143,10 @@ const ProductForm = ({
                       type="button"
                       className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1 mt-2"
                       onClick={() => {
-                        console.log("slugify");
+                        form.setValue(
+                          "slug",
+                          slugify(form.getValues("name"), { lower: true })
+                        );
                       }}
                     >
                       Generate
