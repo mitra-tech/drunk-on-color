@@ -20,8 +20,9 @@ export const metadata: Metadata = {
 };
 
 const AdminOverviewPage = async () => {
-  const summary = await getOrderSummary();
   await requireAdmin();
+
+  const summary = await getOrderSummary();
 
   return (
     <div className="space-y-2">
@@ -80,7 +81,11 @@ const AdminOverviewPage = async () => {
             <CardTitle>Overview</CardTitle>
           </CardHeader>
           <CardContent>
-            <Charts data={{ salesData: summary.salesData }} />
+            <Charts
+              data={{
+                salesData: summary.salesData,
+              }}
+            />
           </CardContent>
         </Card>
         <Card className="col-span-3">
