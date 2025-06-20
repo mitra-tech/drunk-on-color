@@ -23,6 +23,7 @@ import { createProduct, updateProduct } from "@/lib/actions/product.actions";
 import { Card, CardContent } from "../ui/card";
 import Image from "next/image";
 import { Checkbox } from "../ui/checkbox";
+import { UploadButton } from "@/lib/uploadthing";
 
 const ProductForm = ({
   type,
@@ -267,7 +268,15 @@ const ProductForm = ({
           />
         </div>
         <div className="upload-field">
-          {/* isFeatured */}
+          <UploadButton
+            endpoint="imageUploader"
+            onClientUploadComplete={(res: { url: string }[]) => {
+              form.setValue("images", [...images, res[0].url]);
+            }}
+            onUploadError={(error: Error) => {
+              toast.error(error.message);
+            }}
+          />
           Featured Product
           <Card>
             <CardContent className="space-y-2 mt-2">
@@ -295,7 +304,17 @@ const ProductForm = ({
                   height={680}
                 />
               )}
-              {/* upload button */}
+              {isFeatured && !banner && (
+                <UploadButton
+                  endpoint="imageUploader"
+                  onClientUploadComplete={(res: { url: string }[]) => {
+                    form.setValue("banner", res[0].url);
+                  }}
+                  onUploadError={(error: Error) => {
+                    toast.error(error.message);
+                  }}
+                />
+              )}
             </CardContent>
           </Card>
         </div>
