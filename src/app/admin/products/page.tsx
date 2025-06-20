@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getAllProducts } from "@/lib/actions/product.actions";
+import { getAllProducts, deleteProduct } from "@/lib/actions/product.actions";
 import { formatCurrency, formatId } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Pagination from "@/components/shared/pagination";
+import DeleteDialog from "@/components/shared/delete-dialog";
 import { requireAdmin } from "@/lib/auth-guard";
 
 const AdminProductsPage = async (props: {
@@ -82,6 +83,7 @@ const AdminProductsPage = async (props: {
                 <Button asChild variant="outline" size="sm">
                   <Link href={`/admin/products/${product.id}`}>Edit</Link>
                 </Button>
+                <DeleteDialog id={product.id} action={deleteProduct} />
               </TableCell>
             </TableRow>
           ))}

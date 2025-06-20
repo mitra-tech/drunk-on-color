@@ -16,14 +16,15 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { createProduct, updateProduct } from "@/lib/actions/product.actions";
+import { UploadButton } from "@/lib/uploadthing";
 import { Card, CardContent } from "../ui/card";
 import Image from "next/image";
 import { Checkbox } from "../ui/checkbox";
-import { UploadButton } from "@/lib/uploadthing";
 
 const ProductForm = ({
   type,
@@ -57,9 +58,12 @@ const ProductForm = ({
       const res = await createProduct(values);
 
       if (!res.success) {
-        toast.error(res.message);
-      } else {
-        toast(toast.success(res.message));
+        if (!res.success) {
+          toast.error(res.message);
+        } else {
+          toast(toast.success(res.message));
+          router.push("/admin/products");
+        }
         router.push("/admin/products");
       }
     }
@@ -138,7 +142,9 @@ const ProductForm = ({
                     <Button
                       type="button"
                       className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1 mt-2"
-                      onClick={() => console.log("onclick")}
+                      onClick={() => {
+                        console.log("slugify");
+                      }}
                     >
                       Generate
                     </Button>
@@ -258,7 +264,17 @@ const ProductForm = ({
                           height={100}
                         />
                       ))}
-                      <FormControl>{/* Upload button */}</FormControl>
+                      <FormControl>
+                        <UploadButton
+                          endpoint="imageUploader"
+                          onClientUploadComplete={(res: { url: string }[]) => {
+                            form.setValue("images", [...images, res[0].url]);
+                          }}
+                          onUploadError={(error: Error) => {
+                            toast.error(error.message);
+                          }}
+                        />
+                      </FormControl>
                     </div>
                   </CardContent>
                 </Card>
@@ -268,15 +284,7 @@ const ProductForm = ({
           />
         </div>
         <div className="upload-field">
-          <UploadButton
-            endpoint="imageUploader"
-            onClientUploadComplete={(res: { url: string }[]) => {
-              form.setValue("images", [...images, res[0].url]);
-            }}
-            onUploadError={(error: Error) => {
-              toast.error(error.message);
-            }}
-          />
+          {/* isFeatured */}
           Featured Product
           <Card>
             <CardContent className="space-y-2 mt-2">
@@ -304,6 +312,7 @@ const ProductForm = ({
                   height={680}
                 />
               )}
+
               {isFeatured && !banner && (
                 <UploadButton
                   endpoint="imageUploader"
