@@ -15,6 +15,7 @@ import { ShippingAddress } from "@/types";
 import z from "zod";
 import { Prisma } from "@prisma/client";
 import { PAGE_SIZE } from "../constants";
+import { revalidatePath } from "next/cache";
 
 // Sign in the with credentials
 // The reason that this method takes to args is we want to use a new React hook called "useActionState" and when we submit an action with that hook, the first arg is gonna be "prevState", and the second arg is going to be formData
@@ -221,4 +222,23 @@ export async function getAllUsers({
     data,
     totalPages: Math.ceil(dataCount / limit),
   };
+}
+
+// Delete a user
+export async function deleteUser(id: string) {
+  try {
+    await prisma.user.delete({ where: { id } });
+
+    revalidatePath("/admin/users");
+
+    return {
+      success: true,
+      message: "User deleted successfully",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: formatError(error),
+    };
+  }
 }
