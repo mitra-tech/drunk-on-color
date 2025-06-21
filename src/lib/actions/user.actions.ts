@@ -13,6 +13,9 @@ import { prisma } from "@/db/prisma";
 import { formatError } from "../utils";
 import { ShippingAddress } from "@/types";
 import z from "zod";
+import { Prisma } from "@prisma/client";
+import { PAGE_SIZE } from "../constants";
+
 // Sign in the with credentials
 // The reason that this method takes to args is we want to use a new React hook called "useActionState" and when we submit an action with that hook, the first arg is gonna be "prevState", and the second arg is going to be formData
 // When we have actions we can put the action in the action attribute of the form tag in the HTML or JSX
@@ -181,4 +184,41 @@ export async function updateProfile(user: { name: string; email: string }) {
   } catch (error) {
     return { success: false, message: formatError(error) };
   }
+}
+
+// Get all the users
+export async function getAllUsers({
+  limit = PAGE_SIZE,
+  page,
+  query,
+}: {
+  limit?: number;
+  page: number;
+  query: string;
+}) {
+  const queryFilter: Prisma.UserWhereInput =
+    query && query !== "all"
+      ? {
+          name: {
+            contains: query,
+            mode: "insensitive",
+          } as Prisma.StringFilter,
+        }
+      : {};
+
+  const data = await prisma.user.findMany({
+    where: {
+      ...queryFilter,
+    },
+    orderBy: { createdAt: "desc" },
+    take: limit,
+    skip: (page - 1) * limit,
+  });
+
+  const dataCount = await prisma.user.count();
+
+  return {
+    data,
+    totalPages: Math.ceil(dataCount / limit),
+  };
 }
